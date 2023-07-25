@@ -1,4 +1,11 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  images: {
+    domains: ["res.cloudinary.com"],
+  },
+  env: {
+    CLOUDINARY_URL: process.env.CLOUDINARY_URL,
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
