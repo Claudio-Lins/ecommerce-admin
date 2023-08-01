@@ -53,6 +53,43 @@ model Category {
   @@index([billboardId])
 }
 
+model Product {
+  id              String          @id @default(uuid())
+  storeId         String // Foreign Key to Store
+  store           Store           @relation("StoreToProduct", fields: [storeId], references: [id])
+  categoryId      String // Foreign Key to Category
+  category        Category        @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  name            String
+  productDetailId String
+  productDetail   ProductDetail[]
+  ingredients     String
+  isFeatured      Boolean         @default(false)
+  isArchived      Boolean         @default(false)
+  sizeId          String
+  size            Size            @relation(fields: [sizeId], references: [id])
+  orderItems      OrderItem[] // Relation to Order model
+  images          Image[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
+  @@index([categoryId])
+  @@index([sizeId])
+  @@index([productDetailId])
+}
+
+model ProductDetail {
+  id              String    @id @default(uuid())
+  productId       String // Foreign Key to Product
+  products        Product[]
+  price           Decimal
+  weight          String
+  quantityInStock Int
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
 model Size {
   id        String    @id @default(uuid())
   storeId   String // Foreign Key to Store
@@ -64,46 +101,6 @@ model Size {
   updatedAt DateTime  @updatedAt
 
   @@index([storeId])
-}
-
-// model Ingredient {
-//   id        String    @id @default(uuid())
-//   storeId   String // Foreign Key to Store
-//   store     Store     @relation("StoreToIngredient", fields: [storeId], references: [id])
-//   name      String
-//   cor       String?
-//   products  Product[]
-//   createdAt DateTime  @default(now())
-//   updatedAt DateTime  @updatedAt
-
-//   @@index([storeId])
-// }
-
-model Product {
-  id          String      @id @default(uuid())
-  storeId     String // Foreign Key to Store
-  store       Store       @relation("StoreToProduct", fields: [storeId], references: [id])
-  categoryId  String // Foreign Key to Category
-  category    Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  name        String
-  ingredients String
-  // price        Decimal
-  isFeatured  Boolean     @default(false)
-  isArchived  Boolean     @default(false)
-  sizeId      String // Foreign Key to Size
-  size        Size        @relation(fields: [sizeId], references: [id])
-  // ingredientId String // Foreign Key to Color
-  // ingredient   Ingredient  @relation(fields: [ingredientId], references: [id])
-  orderItems  OrderItem[] // Relation to Order model
-  images      Image[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  // @@index([ingredientId])
-
-  @@index([storeId])
-  @@index([categoryId])
-  @@index([sizeId])
 }
 
 model Image {

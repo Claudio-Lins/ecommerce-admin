@@ -61,7 +61,7 @@ export function StoreSwitcher({ className, items = [] }: StoreSwitcherPros) {
           role="combobox"
           aria-expanded={open}
           // eslint-disable-next-line jsx-a11y/aria-props
-          aria-Label="Select a Store"
+          aria-label="Select a Store"
           className={cn("w-[200px] justify-between", className)}
         >
           <StoreIcon className="mr-2 h-4 w-4" />

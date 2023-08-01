@@ -21,6 +21,7 @@ export async function POST(
       categoryId,
       ingredients,
       sizeId,
+      productsDetail,
       images,
       isFeatured,
       isArchived,
@@ -48,6 +49,10 @@ export async function POST(
 
     if (!sizeId) {
       return new NextResponse("Size id is required", { status: 400 });
+    }
+
+    if (!productsDetail) {
+      return new NextResponse("ProductsDetail id is required", { status: 400 });
     }
 
     if (!params.storeId) {
