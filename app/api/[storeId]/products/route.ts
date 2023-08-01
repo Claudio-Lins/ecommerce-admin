@@ -18,9 +18,8 @@ export async function POST(
 
     const {
       name,
-      price,
       categoryId,
-      colorId,
+      ingredients,
       sizeId,
       images,
       isFeatured,
@@ -39,16 +38,12 @@ export async function POST(
       return new NextResponse("Images are required", { status: 400 });
     }
 
-    if (!price) {
-      return new NextResponse("Price is required", { status: 400 });
-    }
-
     if (!categoryId) {
       return new NextResponse("Category id is required", { status: 400 });
     }
 
-    if (!colorId) {
-      return new NextResponse("Color id is required", { status: 400 });
+    if (!ingredients) {
+      return new NextResponse("Ingredients is required", { status: 400 });
     }
 
     if (!sizeId) {
@@ -73,11 +68,10 @@ export async function POST(
     const product = await prismaDb.product.create({
       data: {
         name,
-        price,
+        ingredients,
         isFeatured,
         isArchived,
         categoryId,
-        colorId,
         sizeId,
         storeId: params.storeId,
         images: {
@@ -91,7 +85,7 @@ export async function POST(
     return NextResponse.json(product);
   } catch (error) {
     console.log("[PRODUCTS_POST]", error);
-    return new NextResponse("Internal error", { status: 500 });
+    return new NextResponse("Internal error...", { status: 500 });
   }
 }
 
@@ -109,7 +103,6 @@ export async function GET(
     const { searchParams } = new URL(req.url);
     const categoryId = searchParams.get("categoryId") || undefined;
     const sizeId = searchParams.get("sizeId") || undefined;
-    const colorId = searchParams.get("colorId") || undefined;
     const isFeatured = searchParams.get("isFeatured") || undefined;
 
     if (!params.storeId) {
@@ -121,7 +114,6 @@ export async function GET(
         storeId: params.storeId,
         categoryId,
         sizeId,
-        colorId,
         isFeatured: isFeatured ? true : undefined,
         isArchived: false,
       },
@@ -129,7 +121,6 @@ export async function GET(
         images: true,
         category: true,
         size: true,
-        color: true,
       },
       orderBy: {
         createdAt: "desc",

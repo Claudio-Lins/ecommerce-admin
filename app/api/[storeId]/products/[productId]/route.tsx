@@ -19,7 +19,6 @@ export async function GET(
         images: true,
         category: true,
         size: true,
-        color: true,
       },
     });
     return NextResponse.json(product);
@@ -39,9 +38,8 @@ export async function PATCH(
 
     const {
       name,
-      price,
       categoryId,
-      colorId,
+      ingredients,
       sizeId,
       images,
       isFeatured,
@@ -64,16 +62,12 @@ export async function PATCH(
       return new NextResponse("Images are required", { status: 400 });
     }
 
-    if (!price) {
-      return new NextResponse("Price is required", { status: 400 });
-    }
-
     if (!categoryId) {
       return new NextResponse("Category id is required", { status: 400 });
     }
 
-    if (!colorId) {
-      return new NextResponse("Color id is required", { status: 400 });
+    if (!ingredients) {
+      return new NextResponse("Ingredients is required", { status: 400 });
     }
 
     if (!sizeId) {
@@ -97,11 +91,10 @@ export async function PATCH(
       },
       data: {
         name,
-        price,
         isFeatured,
         isArchived,
         categoryId,
-        colorId,
+        ingredients,
         sizeId,
         storeId: params.storeId,
         images: {

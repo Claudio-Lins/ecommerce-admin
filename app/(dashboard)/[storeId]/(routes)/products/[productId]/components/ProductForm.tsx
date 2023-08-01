@@ -2,13 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import Heading from "@/components/ui/heading";
-import { Category, Color, Image, Product, Size } from "@prisma/client";
+import { Category, Image, Product, Size } from "@prisma/client";
 import { Trash } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import {
   Form,
   FormControl,
@@ -32,13 +32,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
   name: z.string().min(1),
   images: z.object({ url: z.string() }).array(),
-  price: z.coerce.number().min(1),
+  // price: z.coerce.number().min(1),
   categoryId: z.string().min(1),
-  colorId: z.string().min(1),
+  ingredients: z.string().min(1),
   sizeId: z.string().min(1),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
@@ -53,7 +54,6 @@ interface ProductFormProps {
       })
     | null;
   categories: Category[];
-  colors: Color[];
   sizes: Size[];
 }
 
@@ -61,7 +61,6 @@ export function ProductForm({
   initialData,
   categories,
   sizes,
-  colors,
 }: ProductFormProps) {
   const params = useParams();
   const router = useRouter();
@@ -76,15 +75,19 @@ export function ProductForm({
 
   const defaultValues = initialData
     ? {
-        ...initialData,
-        price: parseFloat(String(initialData?.price)),
+        name: initialData.name,
+        images: initialData.images,
+        categoryId: initialData.categoryId,
+        ingredients: initialData.ingredients,
+        sizeId: initialData.sizeId,
+        isFeatured: initialData.isFeatured,
+        isArchived: initialData.isArchived,
       }
     : {
         name: "",
         images: [],
-        price: 0,
         categoryId: "",
-        colorId: "",
+        ingredients: "",
         sizeId: "",
         isFeatured: false,
         isArchived: false,
@@ -200,7 +203,7 @@ export function ProductForm({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="price"
               render={({ field }) => (
@@ -217,7 +220,7 @@ export function ProductForm({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="categoryId"
@@ -282,38 +285,23 @@ export function ProductForm({
                 </FormItem>
               )}
             />
+            {/* tetxArea ingredients */}
             <FormField
               control={form.control}
-              name="colorId"
+              name="ingredients"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Color</FormLabel>
-                  <Select
+                  <FormLabel>Ingredient</FormLabel>
+                  <Textarea
                     disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="Select a color"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {colors.map((color) => (
-                        <SelectItem key={color.id} value={color.id}>
-                          {color.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    placeholder="Ingredients"
+                    {...field}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="isFeatured"

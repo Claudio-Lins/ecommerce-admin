@@ -19,7 +19,6 @@ export default async function ProductsPage({
     include: {
       category: true,
       size: true,
-      color: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -31,10 +30,9 @@ export default async function ProductsPage({
     name: item.name,
     isFeatured: item.isFeatured,
     isArchived: item.isArchived,
-    price: formatter.format(item.price.toNumber()),
     category: item.category.name,
     size: item.size.name,
-    color: item.color.name,
+    ingredients: item.ingredients,
     createdAt: format(item.createdAt, "MMMM do, yyyy"),
   }));
 
